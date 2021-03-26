@@ -37,6 +37,7 @@ const DEFAULT_SOCK = "/var/run/openvswitch/db.sock"
 
 func configureConnection(conn net.Conn) (*OvsdbClient, error) {
 	c := rpc2.NewClientWithCodec(jsonrpc.NewJSONCodec(conn))
+	c.SetBlocking(true)
 	c.Handle("echo", echo)
 	c.Handle("update", update)
 	go c.Run()

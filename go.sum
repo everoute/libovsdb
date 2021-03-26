@@ -1,0 +1,6 @@
+github.com/cenkalti/hub v0.0.0-20201007105119-82396bff75b2 h1:i6LMKzNnVu+QzITPBYiwv+OUcUrKSSkthphdTwCGEzE=
+github.com/cenkalti/hub v0.0.0-20201007105119-82396bff75b2/go.mod h1:tcYwtS3a2d9NO/0xDXVJWx3IedurUjYCqFCmpi0lpHs=
+github.com/cenkalti/hub v1.0.1-0.20140529221144-7be60e186e66 h1:mqwgWF7yBJ/zOFlWZk84IRFG/FhMG0f7aZWvcTx/JHA=
+github.com/cenkalti/hub v1.0.1-0.20140529221144-7be60e186e66/go.mod h1:tcYwtS3a2d9NO/0xDXVJWx3IedurUjYCqFCmpi0lpHs=
+github.com/cenkalti/rpc2 v0.0.0-20210220005819-4a29bc83afe1 h1:aT9Ez2drLmrviqTnVnH87AeXLXLgUrXACJ2g90cTT2w=
+github.com/cenkalti/rpc2 v0.0.0-20210220005819-4a29bc83afe1/go.mod h1:v2npkhrXyk5BCnkNIiPdRI23Uq6uWPUQGL2hnRcRr/M=
