@@ -1,6 +1,9 @@
+github.com/cenk/hub v1.0.1 h1:RBwXNOF4a8KjD8BJ08XqN8KbrqaGiQLDrgvUGJSHuPA=
+github.com/cenk/hub v1.0.1/go.mod h1:rJM1LNAW0ppT8FMMuPK6c2NP/R2nH/UthtuRySSaf6Y=
 github.com/cenkalti/hub v0.0.0-20201007105119-82396bff75b2 h1:i6LMKzNnVu+QzITPBYiwv+OUcUrKSSkthphdTwCGEzE=
 github.com/cenkalti/hub v0.0.0-20201007105119-82396bff75b2/go.mod h1:tcYwtS3a2d9NO/0xDXVJWx3IedurUjYCqFCmpi0lpHs=
-github.com/cenkalti/hub v1.0.1-0.20140529221144-7be60e186e66 h1:mqwgWF7yBJ/zOFlWZk84IRFG/FhMG0f7aZWvcTx/JHA=
-github.com/cenkalti/hub v1.0.1-0.20140529221144-7be60e186e66/go.mod h1:tcYwtS3a2d9NO/0xDXVJWx3IedurUjYCqFCmpi0lpHs=
 github.com/cenkalti/rpc2 v0.0.0-20210220005819-4a29bc83afe1 h1:aT9Ez2drLmrviqTnVnH87AeXLXLgUrXACJ2g90cTT2w=
 github.com/cenkalti/rpc2 v0.0.0-20210220005819-4a29bc83afe1/go.mod h1:v2npkhrXyk5BCnkNIiPdRI23Uq6uWPUQGL2hnRcRr/M=
+github.com/go-logr/logr v0.1.0/go.mod h1:ixOQHD9gLJUVQQ2ZOR7zLEifBX6tGkNJF4QyIY7sIas=
+k8s.io/klog v1.0.0 h1:Pt+yjF5aB1xDSVbau4VsWe+dQNzA0qv1LlXdC2dF6Q8=
+k8s.io/klog v1.0.0/go.mod h1:4Bi6QPql/J/LkTDqv7R/cd3hPo4k2DG6Ptcz060Ez5I=
