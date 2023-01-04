@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  pull_request:
+    branches:
+      - "**"
+
+  push:
+    branches: [master]
+
+jobs:
+  unitest:
+    runs-on: [ubuntu-20.04]
+    steps:
+      - uses: actions/checkout@v2
+      - name: run everoute unit test
+        run: |
+          sudo make docker-test
+          sudo make docker-race-test
+
+  golint:
+    runs-on: [ubuntu-20.04]
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: golangci/golangci-lint-action@v2
+        with:
+          version: v1.48.0
+          only-new-issues: true
+          # skip cache because of flaky behaviors
+          skip-build-cache: true
+          skip-pkg-cache: true

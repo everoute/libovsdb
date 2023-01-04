@@ -95,7 +95,7 @@ func TestNewLockArgs(t *testing.T) {
 func TestEcho(t *testing.T) {
 	req := []interface{}{"hi"}
 	var reply []interface{}
-	echo(nil, req, &reply)
+	_ = echo(&OvsdbClient{})(nil, req, &reply)
 	if !reflect.DeepEqual(req, reply) {
 		t.Error("Expected: ", req, " Got: ", reply)
 	}
@@ -105,13 +105,13 @@ func TestUpdate(t *testing.T) {
 	var reply interface{}
 
 	// Update notification should fail for arrays of size < 2
-	err := update(nil, []interface{}{"hello"}, &reply)
+	err := update(&OvsdbClient{ovsdbCache: map[string]map[string]Row{}})(nil, []interface{}{"hello"}, &reply)
 	if err == nil {
 		t.Error("Expected: error for a dummy request")
 	}
 
 	// Update notification should fail if arg[1] is not map[string]map[string]RowUpdate type
-	err = update(nil, []interface{}{"hello", "gophers"}, &reply)
+	err = update(&OvsdbClient{ovsdbCache: map[string]map[string]Row{}})(nil, []interface{}{"hello", "gophers"}, &reply)
 	if err == nil {
 		t.Error("Expected: error for a dummy request")
 	}
@@ -122,7 +122,7 @@ func TestUpdate(t *testing.T) {
 	validRowUpdate["uuid"] = RowUpdate{}
 	validUpdate["table"] = validRowUpdate
 
-	err = update(nil, []interface{}{"hello", validUpdate}, &reply)
+	err = update(&OvsdbClient{ovsdbCache: map[string]map[string]Row{}})(nil, []interface{}{"hello", validUpdate}, &reply)
 	if err != nil {
 		t.Error(err)
 	}
