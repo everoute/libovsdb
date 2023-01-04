@@ -6,6 +6,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"os/exec"
 	"testing"
 	"time"
 )
@@ -296,10 +297,10 @@ func TestMonitor(t *testing.T) {
 		panic(err)
 	}
 
-	reply, err := ovs.MonitorAll("Open_vSwitch", nil)
+	err = ovs.MonitorAll("Open_vSwitch", nil)
 
-	if reply == nil || err != nil {
-		t.Error("Monitor operation failed with reply=", reply, " and error=", err)
+	if err != nil {
+		t.Error("Monitor operation failed with error=", err)
 	}
 	ovs.Disconnect()
 }
@@ -315,10 +316,15 @@ func TestNotify(t *testing.T) {
 		panic(err)
 	}
 
-	notifyEchoChan := make(chan bool)
+	notifyEchoChan := make(chan bool, 1)
 
 	notifier := Notifier{notifyEchoChan}
 	ovs.Register(notifier)
+	_ = ovs.MonitorAll("Open_vSwitch", nil)
+
+	if _, err = exec.Command("/bin/sh", "-c", "ovs-vsctl add-br test-br").CombinedOutput(); err != nil {
+		t.Error("Failed to breate bridge")
+	}
 
 	timeoutChan := make(chan bool)
 	go func() {
@@ -336,17 +342,18 @@ func TestNotify(t *testing.T) {
 }
 
 type Notifier struct {
-	echoChan chan bool
+	notifyChan chan bool
 }
 
 func (n Notifier) Update(context interface{}, tableUpdates TableUpdates) {
+	n.notifyChan <- true
 }
 func (n Notifier) Locked([]interface{}) {
 }
 func (n Notifier) Stolen([]interface{}) {
 }
 func (n Notifier) Echo([]interface{}) {
-	n.echoChan <- true
+	n.notifyChan <- true
 }
 
 func TestDBSchemaValidation(t *testing.T) {
