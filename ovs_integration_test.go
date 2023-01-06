@@ -152,6 +152,7 @@ func TestGetSchemas(t *testing.T) {
 }
 
 var bridgeName string = "gopher-br7"
+var bridgeNameDisconnect string = "br-disconnect"
 var bridgeUuid string
 
 func TestInsertTransact(t *testing.T) {
@@ -303,6 +304,72 @@ func TestMonitor(t *testing.T) {
 		t.Error("Monitor operation failed with error=", err)
 	}
 	ovs.Disconnect()
+}
+
+func TestDisconnect(t *testing.T) {
+
+	ovs, err := getOvsClient()
+	if err != nil {
+		log.Fatal("Failed to Connect. error:", err)
+		panic(err)
+	}
+	updatesChan := make(chan TableUpdates, 10)
+	ovs.Register(DisconnectNotify{updatesChan})
+
+	err = ovs.MonitorAll("Open_vSwitch", nil)
+	if err != nil {
+		t.Error("Monitor operation failed with error=", err)
+	}
+
+	out, err := exec.Command("/bin/sh", "-c", "/usr/share/openvswitch/scripts/ovs-ctl restart").CombinedOutput()
+	if err != nil {
+		t.Errorf("fail to restart ovsdb, out: %s err: %s\n", out, err)
+	}
+
+	out, err = exec.Command("/bin/sh", "-c", "ovs-vsctl add-br "+bridgeNameDisconnect).CombinedOutput()
+	if err != nil {
+		t.Errorf("fail to create bridge, out: %s err: %s\n", out, err)
+	}
+
+loopTest:
+	for {
+		select {
+		case newUpdates := <-updatesChan:
+			for table := range newUpdates.Updates {
+				if table == "Bridge" {
+					for _, raw := range newUpdates.Updates[table].Rows {
+						if v, ok := raw.New.Fields["name"]; ok {
+							if brName, ok := v.(string); ok {
+								if brName == bridgeNameDisconnect {
+									break loopTest
+								}
+							}
+						}
+					}
+				}
+			}
+		case <-time.After(time.Second * 10):
+			t.Error("No Brige update message in 10 seconds")
+			return
+		}
+
+	}
+
+	ovs.Disconnect()
+}
+
+type DisconnectNotify struct {
+	updates chan TableUpdates
+}
+
+func (n DisconnectNotify) Update(context interface{}, tableUpdates TableUpdates) {
+	n.updates <- tableUpdates
+}
+func (n DisconnectNotify) Locked([]interface{}) {
+}
+func (n DisconnectNotify) Stolen([]interface{}) {
+}
+func (n DisconnectNotify) Echo([]interface{}) {
 }
 
 func TestNotify(t *testing.T) {
