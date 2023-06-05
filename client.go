@@ -298,6 +298,11 @@ func (ovs *OvsdbClient) MonitorReset() error {
 	ovs.updateMutex.Lock()
 	defer ovs.updateMutex.Unlock()
 
+	// skip reset if monitor not exist
+	if len(ovs.monitorArgs) == 0 {
+		return nil
+	}
+
 	var response map[string]map[string]RowUpdate
 	if err := ovs.rpcClient.Call("monitor", ovs.monitorArgs, &response); err != nil {
 		return err
